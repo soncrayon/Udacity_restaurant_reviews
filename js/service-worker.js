@@ -29,11 +29,14 @@ const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
+  'restaurant.html',
   'index.html',
-  './', // Alias for index.html
-  'styles.css',
-  '../../styles/main.css',
-  'demo.js'
+  'css/styles.css',
+  'js/main.js',
+  'js/restaurant-info.js',
+  'js/dbhelper.js',
+  'data/restaurants.json',
+  'js/service-worker.js'
 ];
 
 // The install handler takes care of precaching the resources we always need.
@@ -66,7 +69,7 @@ self.addEventListener('fetch', event => {
   // Skip cross-origin requests, like those for Google Analytics.
   if (event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
+      caches.match(event.request, {ignoreSearch}).then(cachedResponse => {
         if (cachedResponse) {
           return cachedResponse;
         }
